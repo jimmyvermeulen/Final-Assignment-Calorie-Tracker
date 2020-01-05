@@ -3,4 +3,13 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_ingredients">Ingredients</string>
+    <string name="title_recipes">Recipes</string>
+    <string name="title_activity_add_ingredient">AddIngredientActivity</string>
+    <string name="title_activity_add_recipe">AddRecipeActivity</string>
+    <string name="title_activity_add_recipe_ingredient">AddRecipeIngredient</string>
+    <string name="message_select_ingredient">Please select an ingredient</string>
+    <string name="message_enter_ingredient_amount">Please enter the amount of the ingredient used in the recipe</string>
+    <string name="title_activity_add_day_recipe">AddDayRecipeActivity</string>
+    <string name="message_select_meal">Please select a meal</string>
 </resources>
