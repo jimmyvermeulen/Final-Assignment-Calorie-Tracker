@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.calorietracker.R
 import com.example.calorietracker.model.Ingredient
 import com.example.calorietracker.model.Quantity
+import com.example.calorietracker.model.RecipeWithIngredients
 import kotlinx.android.synthetic.main.item_recipe_ingredient.view.*
 
-class RecipeIngredientAdapter(private val ingredients: List<Ingredient>, private val ingredientAmounts: List<Quantity>) :
+class RecipeIngredientAdapter(private val ingredients: List<Ingredient>, private val quantities: List<Quantity>) :
     RecyclerView.Adapter<RecipeIngredientAdapter.ViewHolder>() {
 
     private lateinit var context: Context
@@ -25,7 +26,7 @@ class RecipeIngredientAdapter(private val ingredients: List<Ingredient>, private
 
     override fun getItemCount(): Int = ingredients.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(ingredients[position], ingredientAmounts[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(ingredients[position], quantities[position])
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(ingredient: Ingredient, quantity: Quantity) {

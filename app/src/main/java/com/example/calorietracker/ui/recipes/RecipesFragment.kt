@@ -21,6 +21,8 @@ import com.example.calorietracker.ui.addRecipe.AddRecipeActivity
 import kotlinx.android.synthetic.main.fragment_recipes.*
 
 const val ADD_RECIPE_REQUEST_CODE = 100
+const val UPDATE_RECIPE_REQUEST_CODE = 101
+const val EXTRA_RECIPE = "EXTRA_RECIPE"
 
 class RecipesFragment : Fragment() {
 
@@ -62,6 +64,12 @@ class RecipesFragment : Fragment() {
         startActivityForResult(intent, ADD_RECIPE_REQUEST_CODE)
     }
 
+    private fun startUpdateActivity(recipeWithIngredients: RecipeWithIngredients){
+        val intent = Intent(activity, AddRecipeActivity::class.java)
+        intent.putExtra("EXTRA_RECIPE", recipeWithIngredients)
+        startActivityForResult(intent, UPDATE_RECIPE_REQUEST_CODE)
+    }
+
     private fun initViewModel(){
         recipesViewModel =
             ViewModelProviders.of(this).get(RecipesViewModel::class.java)
@@ -73,7 +81,7 @@ class RecipesFragment : Fragment() {
     }
 
     private fun onRecipeClick(recipeWithIngredients: RecipeWithIngredients){
-
+        startUpdateActivity(recipeWithIngredients)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -82,6 +90,10 @@ class RecipesFragment : Fragment() {
                 ADD_RECIPE_REQUEST_CODE -> {
                     val recipeWithIngredients = data!!.getParcelableExtra<RecipeWithIngredients>(AddRecipeActivity.EXTRA_RECIPE)
                     recipesViewModel.insertRecipeWithIngredients(recipeWithIngredients)
+                }
+                UPDATE_RECIPE_REQUEST_CODE -> {
+                    val recipeWithIngredients = data!!.getParcelableExtra<RecipeWithIngredients>(AddRecipeActivity.EXTRA_RECIPE)
+                    recipesViewModel.updateRecipeWithIngredients(recipeWithIngredients)
                 }
             }
         }

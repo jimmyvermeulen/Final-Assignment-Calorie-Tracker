@@ -14,6 +14,9 @@ interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertRecipe(recipe: Recipe) : Long
 
+    @Update
+    fun updateRecipe(recipe: Recipe)
+
     @Delete
     suspend fun deleteRecipe(recipe: Recipe)
 
@@ -26,7 +29,7 @@ interface RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipeTable WHERE recipeId IN (:recipes)")
-    fun getRecipesWithIngredientsFromRecipess(recipes: List<Long>): LiveData<List<RecipeWithIngredients>>
+    fun getRecipesWithIngredientsFromRecipes(recipes: List<Long>): LiveData<List<RecipeWithIngredients>>
 
 
 }

@@ -1,7 +1,6 @@
 package com.example.calorietracker.database
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.calorietracker.ui.api.FoodApi
 import com.example.calorietracker.ui.api.FoodApiService
@@ -31,20 +30,14 @@ public class CalorieRepository(context: Context) {
     //CREATE
 
     fun insertRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients){
-        Log.d("foodstuff", "1")
         val recipeId : Long = recipeDao.insertRecipe(recipeWithIngredients.recipe)
-        Log.d("foodstuff", "2")
         for(ingredient in recipeWithIngredients.ingredients){
-            Log.d("foodstuff", "2.5")
-            Log.d("foodstuffRecid", recipeId.toString())
             recipeIngredientDao.insertRecipeIngredient(RecipeIngredient(recipeId, ingredient.ingredientId!!))
         }
-        Log.d("foodstuff", "3")
         for(quantity in recipeWithIngredients.quantities){
             val quantityId : Long = quantityDao.insertQuantity(quantity)
             quantityDao.insertRecipeQuantity(RecipeQuantity(recipeId, quantityId))
         }
-        Log.d("foodstuff", "4")
     }
 
     fun insertIngredient(ingredient: Ingredient){
@@ -61,7 +54,7 @@ public class CalorieRepository(context: Context) {
     }
 
     fun getRecipesWithIngredientsFromRecipes(recipes: List<Long>): LiveData<List<RecipeWithIngredients>>{
-        return recipeDao.getRecipesWithIngredientsFromRecipess(recipes)
+        return recipeDao.getRecipesWithIngredientsFromRecipes(recipes)
     }
 
     fun getAllRecipes(): LiveData<List<Recipe>>{
@@ -86,6 +79,20 @@ public class CalorieRepository(context: Context) {
     //UPDATE
     fun updateIngredient(ingredient: Ingredient){
         ingredientDao.updateIngredient(ingredient)
+    }
+
+    suspend fun updateRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients){
+        recipeDao.updateRecipe(recipeWithIngredients.recipe)
+        //Update by remove all and add new
+        recipeIngredientDao.deleteRecipeIngredientsWithIngredient(recipeWithIngredients.recipe.recipeId!!)
+        for(ingredient in recipeWithIngredients.ingredients){
+            recipeIngredientDao.insertRecipeIngredient(RecipeIngredient(recipeWithIngredients.recipe.recipeId!!, ingredient.ingredientId!!))
+        }
+        quantityDao.deleteRecipeQuantitiesWithRecipe(recipeWithIngredients.recipe.recipeId!!)
+        for(quantity in recipeWithIngredients.quantities){
+            val quantityId : Long = quantityDao.insertQuantity(quantity)
+            quantityDao.insertRecipeQuantity(RecipeQuantity(recipeWithIngredients.recipe.recipeId!!, quantityId))
+        }
     }
 
     //DELETE

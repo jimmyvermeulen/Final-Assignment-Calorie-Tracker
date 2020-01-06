@@ -23,12 +23,15 @@ const val ADD_INGREDIENT_REQUEST_CODE = 100
 
 class AddRecipeActivity : AppCompatActivity() {
 
-    private var recipeIngredients = mutableListOf<Ingredient>()
-    private var recipeIngredientAmounts = mutableListOf<Quantity>()
+    private var recipeWithIngredients = RecipeWithIngredients(Recipe("", ""), mutableListOf<Ingredient>(), mutableListOf<Quantity>())
+    private var ingredients = mutableListOf<Ingredient>()
+    private var quantities = mutableListOf<Quantity>()
     private val recipeIngredientAdapter =
         RecipeIngredientAdapter(
-            recipeIngredients,
-            recipeIngredientAmounts
+            ingredients,
+            quantities
+            /*recipeWithIngredients.ingredients,
+            recipeWithIngredients.quantities*/
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,11 +48,18 @@ class AddRecipeActivity : AppCompatActivity() {
         rvRecipeIngredients.adapter = recipeIngredientAdapter
         rvRecipeIngredients.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         createItemTouchHelper().attachToRecyclerView(rvRecipeIngredients)
+        var extraRecipe = intent.getParcelableExtra<RecipeWithIngredients>(EXTRA_RECIPE)
+        extraRecipe?.let{
+            recipeWithIngredients = extraRecipe
+            etRecipeName.setText(extraRecipe.recipe.name)
+            etRecipeInstructions.setText(extraRecipe.recipe.instructions)
+            updateAdapter()
+        }
     }
 
     private fun onSaveClick() {
-        val recipe = Recipe(etRecipeName.text.toString(), etRecipeInstructions.text.toString())
-        val recipeWithIngredients = RecipeWithIngredients(recipe, recipeIngredients, recipeIngredientAmounts)
+        recipeWithIngredients.recipe.name = etRecipeName.text.toString()
+        recipeWithIngredients.recipe.instructions = etRecipeInstructions.text.toString()
 
         val resultIntent = Intent()
         resultIntent.putExtra(EXTRA_RECIPE, recipeWithIngredients)
@@ -63,12 +73,21 @@ class AddRecipeActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 ADD_INGREDIENT_REQUEST_CODE -> {
-                    recipeIngredients.add(data!!.getParcelableExtra<Ingredient>(AddRecipeIngredientActivity.EXTRA_INGREDIENT))
-                    recipeIngredientAmounts.add(Quantity(data!!.getDoubleExtra(AddRecipeIngredientActivity.EXTRA_AMOUNT, 0.0)))
-                    recipeIngredientAdapter.notifyDataSetChanged()
+                    recipeWithIngredients.ingredients.add(data!!.getParcelableExtra<Ingredient>(AddRecipeIngredientActivity.EXTRA_INGREDIENT))
+                    recipeWithIngredients.quantities.add(Quantity(data!!.getDoubleExtra(AddRecipeIngredientActivity.EXTRA_AMOUNT, 0.0)))
+                    updateAdapter()
                 }
             }
         }
+    }
+
+    private fun updateAdapter(){
+        quantities.clear()
+        quantities.addAll(recipeWithIngredients.quantities)
+        ingredients.clear()
+        ingredients.addAll(recipeWithIngredients.ingredients)
+        recipeIngredientAdapter.notifyDataSetChanged()
+
     }
 
     private fun startAddIngredientActivity(){
@@ -98,9 +117,9 @@ class AddRecipeActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                recipeIngredients.removeAt(position)
-                recipeIngredientAmounts.removeAt(position)
-                recipeIngredientAdapter.notifyDataSetChanged()
+                recipeWithIngredients.ingredients.removeAt(position)
+                recipeWithIngredients.quantities.removeAt(position)
+                updateAdapter()
             }
         }
         return ItemTouchHelper(callback)

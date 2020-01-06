@@ -30,4 +30,10 @@ class RecipesViewModel(application: Application) : AndroidViewModel(application)
             calorieRepository.deleteRecipe(recipe)
         }
     }
+
+    fun updateRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients){
+        ioScope.launch {
+            calorieRepository.updateRecipeWithIngredients(recipeWithIngredients)
+        }
+    }
 }
