@@ -20,6 +20,7 @@
             android:id="@+id/etIngredientAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="number"
             android:hint="Ingredient amount in grams" />
     </com.google.android.material.textfield.TextInputLayout>
 

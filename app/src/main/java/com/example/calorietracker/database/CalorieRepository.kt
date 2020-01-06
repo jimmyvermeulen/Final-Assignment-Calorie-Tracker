@@ -51,8 +51,8 @@ public class CalorieRepository(context: Context) {
         ingredientDao.insertIngredient(ingredient)
     }
 
-    fun insertDay(day: Day){
-        dayDao.insertDay(day)
+    fun insertDay(day: Day) : Long{
+        return dayDao.insertDay(day)
     }
 
     //READ
@@ -73,8 +73,8 @@ public class CalorieRepository(context: Context) {
         return ingredientDao.getAllIngredients()
     }
 
-    fun getDayWithRecipesFromDate(dayId: Long): LiveData<DayWithRecipes>{
-        return dayRecipeDao.getDayWithRecipes(dayId)
+    fun getDayWithRecipesFromDay(date: Date): LiveData<DayWithRecipes>{
+        return dayRecipeDao.getDayWithRecipes(date)
     }
 
     fun getAllDaysWithRecipes():LiveData<List<DayWithRecipes>>{

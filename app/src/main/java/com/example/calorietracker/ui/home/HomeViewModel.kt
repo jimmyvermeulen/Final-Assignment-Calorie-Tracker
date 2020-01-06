@@ -11,6 +11,7 @@ import com.example.calorietracker.model.DayWithRecipes
 import com.example.calorietracker.model.RecipeWithIngredients
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -18,12 +19,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
     private val calorieRepository = CalorieRepository(application.applicationContext)
+    lateinit var dayWithRecipes : LiveData<DayWithRecipes>
 
     //val currentTime : Date = GregorianCalendar(Calendar.YEAR, Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH).time
 
-    val recipesWithIngredients: LiveData<List<RecipeWithIngredients>> = calorieRepository.getAllRecipesWithIngredients()
-
-    fun setDay(){
+    init {
         var calendar : Calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -33,5 +33,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         ioScope.launch {
             calorieRepository.insertDay(Day(dayStart))
         }
+        dayWithRecipes = calorieRepository.getDayWithRecipesFromDay(dayStart)
+
+
     }
+
 }

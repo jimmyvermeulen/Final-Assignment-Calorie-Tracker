@@ -14,8 +14,8 @@ interface DayRecipeDao {
     fun insertDayRecipe(dayRecipe: DayRecipe)
 
     @Transaction
-    @Query("SELECT * FROM dayTable WHERE dayId = :dayId")
-    fun getDayWithRecipes(dayId: Long): LiveData<DayWithRecipes>
+    @Query("SELECT * FROM dayTable WHERE date = :date")
+    fun getDayWithRecipes(date: Date): LiveData<DayWithRecipes>
 
     @Transaction
     @Query("SELECT r.* FROM dayTable d INNER JOIN dayRecipeTable dr ON d.dayId = dr.dayId INNER JOIN recipeTable r ON dr.recipeId = r.recipeId WHERE d.dayId = :dayId")

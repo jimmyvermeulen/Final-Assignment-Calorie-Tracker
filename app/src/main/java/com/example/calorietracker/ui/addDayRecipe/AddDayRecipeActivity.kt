@@ -41,7 +41,7 @@ class AddDayRecipeActivity : AppCompatActivity() {
     private fun initViews(){
         rvDayRecipe.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvDayRecipe.adapter = recipesWithIngredientsAdapter
-        rvAddRecipeIngredient.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        rvDayRecipe.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
 
     private fun initViewModel(){
