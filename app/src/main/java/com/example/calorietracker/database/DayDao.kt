@@ -11,8 +11,8 @@ interface DayDao {
     @Query("SELECT * FROM dayTable")
     fun getAllDays(): LiveData<List<Day>>
 
-    @Query("SELECT * FROM dayTable WHERE date = :date")
-    fun getDay(date: Date): LiveData<Day>
+    @Query("SELECT * FROM dayTable WHERE dayId = :dayId")
+    fun getDay(dayId: Long): LiveData<Day>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertDay(day: Day)

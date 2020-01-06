@@ -14,5 +14,11 @@ data class RecipeWithIngredients(
         entityColumn = "ingredientId",
         associateBy = Junction(RecipeIngredient::class)
     )
-    val ingredients: List<Ingredient>
+    val ingredients: List<Ingredient>,
+    @Relation(
+        parentColumn = "recipeId",
+        entityColumn = "quantityId",
+        associateBy = Junction(RecipeQuantity::class)
+    )
+    val quantities: List<Quantity>
 ) : Parcelable

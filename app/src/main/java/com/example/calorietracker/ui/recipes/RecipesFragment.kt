@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -80,9 +81,7 @@ class RecipesFragment : Fragment() {
             when (requestCode) {
                 ADD_RECIPE_REQUEST_CODE -> {
                     val recipeWithIngredients = data!!.getParcelableExtra<RecipeWithIngredients>(AddRecipeActivity.EXTRA_RECIPE)
-                    val ingredientAmounts = data!!.getDoubleArrayExtra(AddRecipeActivity.EXTRA_AMOUNTS).toList()
-
-                    recipesViewModel.insertRecipeWithIngredients(recipeWithIngredients, ingredientAmounts)
+                    recipesViewModel.insertRecipeWithIngredients(recipeWithIngredients)
                 }
             }
         }

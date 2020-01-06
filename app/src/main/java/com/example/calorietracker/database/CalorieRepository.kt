@@ -1,6 +1,7 @@
 package com.example.calorietracker.database
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.calorietracker.ui.api.FoodApi
 import com.example.calorietracker.ui.api.FoodApiService
@@ -14,6 +15,7 @@ public class CalorieRepository(context: Context) {
     private var dayDao : DayDao
     private var recipeIngredientDao : RecipeIngredientDao
     private var dayRecipeDao : DayRecipeDao
+    private var quantityDao : QuantityDao
     private val foodApi: FoodApiService = FoodApi.createApi()
 
     init {
@@ -23,21 +25,26 @@ public class CalorieRepository(context: Context) {
         dayDao = calorieRoomDatabase!!.dayDao()
         recipeIngredientDao = calorieRoomDatabase!!.recipeIngredientDao()
         dayRecipeDao = calorieRoomDatabase!!.dayRecipeDao()
+        quantityDao = calorieRoomDatabase!!.quantityDao()
     }
 
     //CREATE
 
-    fun insertRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients, ingredientAmounts: List<Double>){
-        var recipeId : Long = recipeDao.insertRecipe(recipeWithIngredients.recipe)
-        for(i in recipeWithIngredients.ingredients.indices){
-            recipeIngredientDao.insertRecipeIngredient(
-                RecipeIngredient(
-                    recipeId,
-                    recipeWithIngredients.ingredients[i].ingredientId!!,
-                    ingredientAmounts[i]
-                )
-            )
+    fun insertRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients){
+        Log.d("foodstuff", "1")
+        val recipeId : Long = recipeDao.insertRecipe(recipeWithIngredients.recipe)
+        Log.d("foodstuff", "2")
+        for(ingredient in recipeWithIngredients.ingredients){
+            Log.d("foodstuff", "2.5")
+            Log.d("foodstuffRecid", recipeId.toString())
+            recipeIngredientDao.insertRecipeIngredient(RecipeIngredient(recipeId, ingredient.ingredientId!!))
         }
+        Log.d("foodstuff", "3")
+        for(quantity in recipeWithIngredients.quantities){
+            val quantityId : Long = quantityDao.insertQuantity(quantity)
+            quantityDao.insertRecipeQuantity(RecipeQuantity(recipeId, quantityId))
+        }
+        Log.d("foodstuff", "4")
     }
 
     fun insertIngredient(ingredient: Ingredient){
@@ -66,17 +73,8 @@ public class CalorieRepository(context: Context) {
         return ingredientDao.getAllIngredients()
     }
 
-    fun getRecipesFromDate(date: Date): LiveData<DayWithRecipes>{
-        var day : Day = dayDao.getDay(date).value!!
-        return dayRecipeDao.getDayWithRecipes(day.dayId!!)
-    }
-
     fun getDayWithRecipesFromDate(dayId: Long): LiveData<DayWithRecipes>{
         return dayRecipeDao.getDayWithRecipes(dayId)
-    }
-
-    fun getDayFromDate(date: Date): LiveData<Day> {
-        return dayDao.getDay(date)
     }
 
     fun getAllDaysWithRecipes():LiveData<List<DayWithRecipes>>{
@@ -86,7 +84,9 @@ public class CalorieRepository(context: Context) {
     fun getFoodList(ingredientName: String) = foodApi.getFoodList(ingredientName)
 
     //UPDATE
-
+    fun updateIngredient(ingredient: Ingredient){
+        ingredientDao.updateIngredient(ingredient)
+    }
 
     //DELETE
     suspend fun deleteIngredient(ingredient: Ingredient){

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.calorietracker.R
 import com.example.calorietracker.model.Ingredient
+import com.example.calorietracker.model.Quantity
 import com.example.calorietracker.model.Recipe
 import com.example.calorietracker.model.RecipeWithIngredients
 import com.example.calorietracker.ui.adapters.RecipeIngredientAdapter
@@ -23,7 +24,7 @@ const val ADD_INGREDIENT_REQUEST_CODE = 100
 class AddRecipeActivity : AppCompatActivity() {
 
     private var recipeIngredients = mutableListOf<Ingredient>()
-    private var recipeIngredientAmounts = mutableListOf<Double>()
+    private var recipeIngredientAmounts = mutableListOf<Quantity>()
     private val recipeIngredientAdapter =
         RecipeIngredientAdapter(
             recipeIngredients,
@@ -48,11 +49,10 @@ class AddRecipeActivity : AppCompatActivity() {
 
     private fun onSaveClick() {
         val recipe = Recipe(etRecipeName.text.toString(), etRecipeInstructions.text.toString())
-        val recipeWithIngredients = RecipeWithIngredients(recipe, recipeIngredients)
+        val recipeWithIngredients = RecipeWithIngredients(recipe, recipeIngredients, recipeIngredientAmounts)
 
         val resultIntent = Intent()
         resultIntent.putExtra(EXTRA_RECIPE, recipeWithIngredients)
-        resultIntent.putExtra(EXTRA_AMOUNTS, recipeIngredientAmounts.toDoubleArray())
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
@@ -64,7 +64,7 @@ class AddRecipeActivity : AppCompatActivity() {
             when (requestCode) {
                 ADD_INGREDIENT_REQUEST_CODE -> {
                     recipeIngredients.add(data!!.getParcelableExtra<Ingredient>(AddRecipeIngredientActivity.EXTRA_INGREDIENT))
-                    recipeIngredientAmounts.add(data!!.getDoubleExtra(AddRecipeIngredientActivity.EXTRA_AMOUNT, 0.0))
+                    recipeIngredientAmounts.add(Quantity(data!!.getDoubleExtra(AddRecipeIngredientActivity.EXTRA_AMOUNT, 0.0)))
                     recipeIngredientAdapter.notifyDataSetChanged()
                 }
             }
@@ -78,7 +78,6 @@ class AddRecipeActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_RECIPE = "EXTRA_RECIPE"
-        const val EXTRA_AMOUNTS = "EXTRA_AMOUNTS"
     }
 
     private fun createItemTouchHelper(): ItemTouchHelper {

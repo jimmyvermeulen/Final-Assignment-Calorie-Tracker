@@ -19,9 +19,9 @@ class RecipesViewModel(application: Application) : AndroidViewModel(application)
     val recipesWithIngredients: LiveData<List<RecipeWithIngredients>> = calorieRepository.getAllRecipesWithIngredients()
 
 
-    fun insertRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients, ingredientAmounts: List<Double>) {
+    fun insertRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients) {
         ioScope.launch {
-            calorieRepository.insertRecipeWithIngredients(recipeWithIngredients, ingredientAmounts)
+            calorieRepository.insertRecipeWithIngredients(recipeWithIngredients)
         }
     }
 

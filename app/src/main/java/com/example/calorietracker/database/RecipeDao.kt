@@ -11,7 +11,7 @@ interface RecipeDao {
     @Query("SELECT * FROM recipeTable")
     fun getAllRecipes(): LiveData<List<Recipe>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertRecipe(recipe: Recipe) : Long
 
     @Delete

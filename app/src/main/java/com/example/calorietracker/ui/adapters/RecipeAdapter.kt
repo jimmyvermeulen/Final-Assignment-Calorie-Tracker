@@ -1,6 +1,7 @@
 package com.example.calorietracker.ui.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,9 +36,9 @@ class RecipeAdapter(private val recipes: List<RecipeWithIngredients>, private va
 
         fun bind(recipeWithIngredients: RecipeWithIngredients) {
             itemView.tvRecipeName.text = recipeWithIngredients.recipe.name
-            var totalCalories : Double = 0.0
-            for(ingredient in recipeWithIngredients.ingredients){
-                totalCalories += ingredient.calories
+            var totalCalories = 0.0
+            for(i in recipeWithIngredients.ingredients.indices){
+                totalCalories += recipeWithIngredients.ingredients[i].calories * recipeWithIngredients.quantities[i].amount / 100
             }
             itemView.tvRecipeCalories.text = context.getString(R.string.kcal, "%.2f".format(totalCalories))
         }

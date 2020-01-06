@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.calorietracker.model.*
 
-@Database(entities = [Day::class, Ingredient::class, Recipe::class, RecipeIngredient::class, DayRecipe::class], version = 1, exportSchema = false)
+@Database(entities = [Day::class, Ingredient::class, Recipe::class, Quantity::class, RecipeIngredient::class, DayRecipe::class, RecipeQuantity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class CalorieRoomDatabase : RoomDatabase() {
 
@@ -16,6 +16,7 @@ abstract class CalorieRoomDatabase : RoomDatabase() {
     abstract fun ingredientDao(): IngredientDao
     abstract fun recipeIngredientDao() : RecipeIngredientDao
     abstract fun dayRecipeDao() : DayRecipeDao
+    abstract fun quantityDao() : QuantityDao
 
     companion object {
         private const val DATABASE_NAME = "CALORIE_DATABASE"

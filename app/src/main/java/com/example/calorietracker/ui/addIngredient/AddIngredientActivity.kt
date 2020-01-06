@@ -43,6 +43,8 @@ class AddIngredientActivity : AppCompatActivity() {
         rvFoodList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvFoodList.adapter = foodAdapter
         rvFoodList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        var extraIngredient = intent.getParcelableExtra<Ingredient>(com.example.calorietracker.ui.ingredients.EXTRA_INGREDIENT)
+        extraIngredient?.let{ selectedIngredient = extraIngredient}
         btnSearchFood.setOnClickListener{onSearchClick()}
     }
 
@@ -73,7 +75,12 @@ class AddIngredientActivity : AppCompatActivity() {
     }
 
     private fun onFoodClick(hints: Hints){
-        selectedIngredient = Ingredient(hints.food.label, hints.food.nutrients.eNERC_KCAL)
+        if(::selectedIngredient.isInitialized){
+            selectedIngredient.name = hints.food.label
+            selectedIngredient.calories = hints.food.nutrients.eNERC_KCAL
+        }
+        else
+            selectedIngredient = Ingredient(hints.food.label, hints.food.nutrients.eNERC_KCAL)
         onSaveClick()
     }
 

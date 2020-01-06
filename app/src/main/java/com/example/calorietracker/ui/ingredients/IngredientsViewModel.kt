@@ -22,6 +22,12 @@ class IngredientsViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    fun updateIngredient(ingredient: Ingredient) {
+        ioScope.launch {
+            calorieRepository.updateIngredient(ingredient)
+        }
+    }
+
     fun deleteIngredient(ingredient: Ingredient) {
         ioScope.launch {
             calorieRepository.deleteIngredient(ingredient)

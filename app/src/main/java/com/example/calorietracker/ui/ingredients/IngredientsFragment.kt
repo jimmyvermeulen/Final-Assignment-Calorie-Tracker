@@ -20,6 +20,8 @@ import com.example.calorietracker.model.Ingredient
 import kotlinx.android.synthetic.main.fragment_ingredients.*
 
 const val ADD_INGREDIENT_REQUEST_CODE = 100
+const val UPDATE_INGREDIENT_REQUEST_CODE = 100
+const val EXTRA_INGREDIENT = "EXTRA_INGREDIENT"
 
 class IngredientsFragment : Fragment() {
 
@@ -61,6 +63,12 @@ class IngredientsFragment : Fragment() {
         startActivityForResult(intent, ADD_INGREDIENT_REQUEST_CODE)
     }
 
+    private fun startUpdateActivity(ingredient: Ingredient){
+        val intent = Intent(activity, AddIngredientActivity::class.java)
+        intent.putExtra(EXTRA_INGREDIENT, ingredient)
+        startActivityForResult(intent, UPDATE_INGREDIENT_REQUEST_CODE)
+    }
+
     private fun initViewModel(){
         ingredientsViewModel =
             ViewModelProviders.of(this).get(IngredientsViewModel::class.java)
@@ -72,7 +80,7 @@ class IngredientsFragment : Fragment() {
     }
 
     private fun onIngredientClick(ingredient : Ingredient){
-
+        startUpdateActivity(ingredient)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -82,6 +90,12 @@ class IngredientsFragment : Fragment() {
                     val ingredient = data!!.getParcelableExtra<Ingredient>(AddIngredientActivity.EXTRA_INGREDIENT)
 
                     ingredientsViewModel.insertIngredient(ingredient)
+                }
+
+                UPDATE_INGREDIENT_REQUEST_CODE -> {
+                    val ingredient = data!!.getParcelableExtra<Ingredient>(AddIngredientActivity.EXTRA_INGREDIENT)
+
+                    ingredientsViewModel.updateIngredient(ingredient)
                 }
             }
         }
