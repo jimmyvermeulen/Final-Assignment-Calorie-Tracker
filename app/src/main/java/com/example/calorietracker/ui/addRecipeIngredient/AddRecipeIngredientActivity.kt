@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.calorietracker.R
 import com.example.calorietracker.model.Ingredient
-import com.example.calorietracker.ui.IngredientAdapter
+import com.example.calorietracker.ui.adapters.IngredientAdapter
 import com.example.calorietracker.ui.ingredients.IngredientsViewModel
 
 import kotlinx.android.synthetic.main.activity_add_recipe_ingredient.*
@@ -24,7 +24,7 @@ class AddRecipeIngredientActivity : AppCompatActivity() {
     private val ingredientAdapter =
         IngredientAdapter(ingredients) { ingredient ->
             onIngredientClick(ingredient)
-    }
+        }
 
     private lateinit var selectedIngredient: Ingredient
     private lateinit var ingredientsViewModel: IngredientsViewModel
@@ -51,9 +51,6 @@ class AddRecipeIngredientActivity : AppCompatActivity() {
         rvAddRecipeIngredient.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvAddRecipeIngredient.adapter = ingredientAdapter
         rvAddRecipeIngredient.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        fabRecipeIngredient.setOnClickListener{
-            endActivity()
-        }
     }
 
     private fun endActivity(){
@@ -78,6 +75,7 @@ class AddRecipeIngredientActivity : AppCompatActivity() {
 
     private fun onIngredientClick(ingredient: Ingredient){
         selectedIngredient = ingredient
+        endActivity()
     }
 
     companion object {

@@ -12,4 +12,8 @@
     <string name="message_enter_ingredient_amount">Please enter the amount of the ingredient used in the recipe</string>
     <string name="title_activity_add_day_recipe">AddDayRecipeActivity</string>
     <string name="message_select_meal">Please select a meal</string>
+    <string name="message_fill_search">Please fill the search field</string>
+    <string name="kcal100g">%1$s kcal/100g</string>
+    <string name="amount_grams">%1$s g</string>
+    <string name="kcal">%1$s kcal</string>
 </resources>

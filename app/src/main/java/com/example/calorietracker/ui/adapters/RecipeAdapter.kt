@@ -1,4 +1,4 @@
-package com.example.calorietracker.ui
+package com.example.calorietracker.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,7 +13,6 @@ class RecipeAdapter(private val recipes: List<RecipeWithIngredients>, private va
     RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
 
     private lateinit var context: Context
-    var itemViewList = mutableListOf<View>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -28,22 +27,19 @@ class RecipeAdapter(private val recipes: List<RecipeWithIngredients>, private va
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(recipes[position])
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {itemViewList.add(itemView)
+        init {
             itemView.setOnClickListener {
                 onClick(recipes[adapterPosition])
-                //Set background of selected ingredient to blue
-                for (tempItemView in itemViewList) {
-                    if (itemViewList[this.adapterPosition] === tempItemView) {
-                        tempItemView.setBackgroundResource(R.color.colorSelected)
-                    } else {
-                        tempItemView.setBackgroundResource(R.color.colorDefault)
-                    }
-                }
             }
         }
 
         fun bind(recipeWithIngredients: RecipeWithIngredients) {
             itemView.tvRecipeName.text = recipeWithIngredients.recipe.name
+            var totalCalories : Double = 0.0
+            for(ingredient in recipeWithIngredients.ingredients){
+                totalCalories += ingredient.calories
+            }
+            itemView.tvRecipeCalories.text = context.getString(R.string.kcal, "%.2f".format(totalCalories))
         }
     }
 

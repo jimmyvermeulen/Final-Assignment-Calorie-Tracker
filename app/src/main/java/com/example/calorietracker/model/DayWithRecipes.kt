@@ -14,5 +14,5 @@ data class DayWithRecipes(
         entityColumn = "recipeId",
         associateBy = Junction(DayRecipe::class)
     )
-    val recipes: List<Recipe> //Recipewithingredients might screw things up
+    val recipes: List<Recipe>
 ) : Parcelable

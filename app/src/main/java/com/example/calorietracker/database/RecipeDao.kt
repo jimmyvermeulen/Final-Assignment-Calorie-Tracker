@@ -24,5 +24,9 @@ interface RecipeDao {
     @Query("SELECT * FROM recipeTable")
     fun getAllRecipesWithIngredients(): LiveData<List<RecipeWithIngredients>>
 
+    @Transaction
+    @Query("SELECT * FROM recipeTable WHERE recipeId IN (:recipes)")
+    fun getRecipesWithIngredientsFromRecipess(recipes: List<Long>): LiveData<List<RecipeWithIngredients>>
+
 
 }

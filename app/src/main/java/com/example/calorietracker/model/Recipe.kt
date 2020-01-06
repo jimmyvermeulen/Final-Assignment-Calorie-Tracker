@@ -13,6 +13,9 @@ data class Recipe(
     @ColumnInfo(name = "name")
     var name: String,
 
+    @ColumnInfo(name = "instructions")
+    var instructions: String,
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "recipeId")
     var recipeId: Long? = null

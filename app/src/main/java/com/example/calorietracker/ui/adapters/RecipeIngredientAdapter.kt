@@ -1,4 +1,4 @@
-package com.example.calorietracker.ui
+package com.example.calorietracker.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.calorietracker.R
 import com.example.calorietracker.model.Ingredient
-import com.example.calorietracker.model.RecipeWithIngredients
 import kotlinx.android.synthetic.main.item_recipe_ingredient.view.*
 
-class RecipeIngredientAdapter(private val ingredients: List<Ingredient>) :
+class RecipeIngredientAdapter(private val ingredients: List<Ingredient>, private val ingredientAmounts: List<Double>) :
     RecyclerView.Adapter<RecipeIngredientAdapter.ViewHolder>() {
 
     private lateinit var context: Context
@@ -25,11 +24,12 @@ class RecipeIngredientAdapter(private val ingredients: List<Ingredient>) :
 
     override fun getItemCount(): Int = ingredients.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(ingredients[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(ingredients[position], ingredientAmounts[position])
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(ingredient: Ingredient) {
+        fun bind(ingredient: Ingredient, ingredientAmount: Double) {
             itemView.tvRecipeIngredientName.text = ingredient.name
+            itemView.tvRecipeIngredientAmount.text = context.getString(R.string.amount_grams, "%.2f".format(ingredientAmount))
         }
     }
 

@@ -14,7 +14,7 @@ interface DayDao {
     @Query("SELECT * FROM dayTable WHERE date = :date")
     fun getDay(date: Date): LiveData<Day>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertDay(day: Day)
 
     @Delete

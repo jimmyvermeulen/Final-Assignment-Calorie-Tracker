@@ -10,11 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.calorietracker.R
 import com.example.calorietracker.model.RecipeWithIngredients
-import com.example.calorietracker.ui.RecipeAdapter
+import com.example.calorietracker.ui.adapters.RecipeAdapter
 import com.example.calorietracker.ui.addRecipe.AddRecipeActivity
 import kotlinx.android.synthetic.main.fragment_recipes.*
 
@@ -24,8 +25,8 @@ class RecipesFragment : Fragment() {
 
     private val recipesWithIngredients = arrayListOf<RecipeWithIngredients>()
     private val recipeAdapter =
-        RecipeAdapter(recipesWithIngredients) { recipe ->
-            onRecipeClick(recipe)
+        RecipeAdapter(recipesWithIngredients) { recipeWithIngredients ->
+            onRecipeClick(recipeWithIngredients)
         }
     private lateinit var recipesViewModel: RecipesViewModel
 
@@ -52,6 +53,7 @@ class RecipesFragment : Fragment() {
         rvRecipes.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         rvRecipes.adapter = recipeAdapter
         rvRecipes.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+        createItemTouchHelper().attachToRecyclerView(rvRecipes)
     }
 
     private fun startAddActivity(){
@@ -85,4 +87,30 @@ class RecipesFragment : Fragment() {
             }
         }
     }
+
+    private fun createItemTouchHelper(): ItemTouchHelper {
+
+        // Callback which is used to create the ItemTouch helper. Only enables left swipe.
+        // Use ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) to also enable right swipe.
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            // Enables or Disables the ability to move items up and down.
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            // Callback triggered when a user swiped an item.
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val recipeToDelete = recipesWithIngredients[position].recipe
+                recipesViewModel.deleteRecipe(recipeToDelete)
+            }
+        }
+        return ItemTouchHelper(callback)
+    }
+
 }
