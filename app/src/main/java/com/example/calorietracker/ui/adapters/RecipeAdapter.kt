@@ -37,7 +37,7 @@ class RecipeAdapter(private val recipes: List<RecipeWithIngredients>, private va
         fun bind(recipeWithIngredients: RecipeWithIngredients) {
             itemView.tvRecipeName.text = recipeWithIngredients.recipe.name
             var totalCalories = 0.0
-            for(i in recipeWithIngredients.ingredients.indices){
+            for(i in recipeWithIngredients.quantities.indices){
                 totalCalories += recipeWithIngredients.ingredients[i].calories * recipeWithIngredients.quantities[i].amount / 100
             }
             itemView.tvRecipeCalories.text = context.getString(R.string.kcal, "%.2f".format(totalCalories))

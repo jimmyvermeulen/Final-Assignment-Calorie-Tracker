@@ -84,13 +84,15 @@ public class CalorieRepository(context: Context) {
     suspend fun updateRecipeWithIngredients(recipeWithIngredients: RecipeWithIngredients){
         recipeDao.updateRecipe(recipeWithIngredients.recipe)
         //Update by remove all and add new
-        recipeIngredientDao.deleteRecipeIngredientsWithIngredient(recipeWithIngredients.recipe.recipeId!!)
+        recipeIngredientDao.deleteRecipeIngredientsWithRecipe(recipeWithIngredients.recipe.recipeId!!)
         for(ingredient in recipeWithIngredients.ingredients){
             recipeIngredientDao.insertRecipeIngredient(RecipeIngredient(recipeWithIngredients.recipe.recipeId!!, ingredient.ingredientId!!))
         }
         quantityDao.deleteRecipeQuantitiesWithRecipe(recipeWithIngredients.recipe.recipeId!!)
         for(quantity in recipeWithIngredients.quantities){
-            val quantityId : Long = quantityDao.insertQuantity(quantity)
+            var quantityId : Long? = quantity.quantityId
+            if(quantityId == null)
+                quantityId = quantityDao.insertQuantity(quantity)
             quantityDao.insertRecipeQuantity(RecipeQuantity(recipeWithIngredients.recipe.recipeId!!, quantityId))
         }
     }

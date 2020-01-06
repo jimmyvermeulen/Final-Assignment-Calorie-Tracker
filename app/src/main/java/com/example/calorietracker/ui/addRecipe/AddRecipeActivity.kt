@@ -24,14 +24,12 @@ const val ADD_INGREDIENT_REQUEST_CODE = 100
 class AddRecipeActivity : AppCompatActivity() {
 
     private var recipeWithIngredients = RecipeWithIngredients(Recipe("", ""), mutableListOf<Ingredient>(), mutableListOf<Quantity>())
-    private var ingredients = mutableListOf<Ingredient>()
-    private var quantities = mutableListOf<Quantity>()
+    private val ingredients = mutableListOf<Ingredient>()
+    private val quantities = mutableListOf<Quantity>()
     private val recipeIngredientAdapter =
         RecipeIngredientAdapter(
             ingredients,
             quantities
-            /*recipeWithIngredients.ingredients,
-            recipeWithIngredients.quantities*/
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
